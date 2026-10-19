@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gefei SEO 学习路线</title>
+<style>
+  /* ============================================================
+     设计系统 · 三色克制
+     ① 暖黑三阶（正文/次要/弱化）  ② Claude 蓝（唯一强调色）
+     ③ 涨跌语义色（A 股习惯：红涨 / 绿跌，仅出现在数据标签与变化数字上）
+     ============================================================ */
+  :root{
+    /* Claude Desktop 设计令牌（CDS 浅色）：取自 Claude.app 内 app.asar 的
+       --cds-* 变量（data-density=comfortable）与 claude.ai 渲染截图实测。
+       画布仍为纯白、容器圆角 8px（2026-09-15 起与 Claude Desktop 对齐，此前 12px）。 */
+    --bg:#FFFFFF; --surface:#FFFFFF; --surface-2:rgba(11,11,11,.03); --surface-3:rgba(11,11,11,.02);
+    --ink:#0B0B0B; --ink-2:#3D3D3A; --ink-3:#52514E; --ink-4:#898781;
+    --line:rgba(11,11,11,.10); --line-2:rgba(11,11,11,.06);
+    --accent:#184F95; --accent-ink:#104281; --accent-deep:#0D366B;
+    --accent-soft:rgba(24,79,149,.06); --accent-line:rgba(24,79,149,.20); --accent-mute:#256ABF;
+    --wash:rgba(11,11,11,.03); --wash-line:rgba(11,11,11,.08);   /* 容器底色走 Claude 的中性灰，不用彩色底 */
+    --up:#B93535; --up-soft:rgba(185,53,53,.08); --up-line:rgba(185,53,53,.22);      /* 涨（红涨绿跌：A 股习惯，语义不变） */
+    --down:#008300; --down-soft:rgba(0,131,0,.08); --down-line:rgba(0,131,0,.22);    /* 跌 */
+    /* 全站单一字体：标题与正文同族，禁止混用衬线（2026-09-14 用户要求）。
+       Anthropic Sans 与 Claude Desktop 同族，未安装时自动回退系统栈，不影响渲染 */
+    --sans:'Anthropic Sans',-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+    --mono:'SF Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    --radius:8px; --radius-sm:8px;
+    --shadow-1:0 1px 2px rgba(11,11,11,.04);
+    --shadow-2:0 4px 16px rgba(11,11,11,.06);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  /* 字号与页边距基准：与《赛恩斯ERP可维护性与性能核查报告-20260914》逐值对齐（2026-09-15 用户要求），勿整体缩放 */
+  body{
+    font-family:var(--sans); background:var(--bg); color:var(--ink);
+    font-size:25px; line-height:1.7; overflow-x:hidden;
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    text-rendering:optimizeLegibility;
+    transition:padding-left .26s ease;
+  }
+  body.toc-open{padding-left:340px}
+
+  /* 画布：容器不再是「一张白纸」，而是透明画布；白色留给真正需要浮起的组件 */
+  .container{max-width:1140px;margin:0 auto;padding:13px 16px 30px}
+
+  /* ---------- 报头：无底色，靠排版建立层级（2026-09-14 用户要求：移除标题上方蓝色短线） ---------- */
+  .hero{position:relative; margin:0 0 40px; padding:0 0 26px; border-bottom:1px solid var(--line)}
+  .hero h1{
+    font-weight:600; letter-spacing:-.015em;
+    font-size:clamp(34px,3.6vw,44px); line-height:1.24; color:var(--ink);
+    text-wrap:balance;
+  }
+  .hero__lede{max-width:900px; margin:16px 0 0; font-size:23px; line-height:1.7; color:var(--ink-2)}
+  .hero__lede b{color:var(--ink); font-weight:640}
+  .hero .date-meta{margin:18px 0 0; padding:0; border:none; color:var(--ink-3); font-size:18px}
+  .hero .date-meta strong{color:var(--ink); font-weight:640}
+  .date-meta .meta-stats,.date-meta .meta-version,.date-meta .meta-agent{color:var(--ink-3)}
+
+  /* ---------- 无 Hero 时的降级头部（兼容旧写法） ---------- */
+  .container>h1:first-child{
+    font-weight:600; letter-spacing:-.015em;
+    font-size:clamp(34px,4vw,48px); line-height:1.22; margin-bottom:14px;
+  }
+  .subtitle{color:var(--ink-3); font-size:23px; line-height:1.7; margin-bottom:8px}
+  .container>.date-meta{
+    color:var(--ink-3); font-size:18px; margin:14px 0 40px; padding-bottom:24px;
+    border-bottom:1px solid var(--line);
+  }
+  .container>.date-meta strong{color:var(--ink); font-weight:640}
+
+  /* ---------- 标题层级 ---------- */
+  h2{
+    font-size:clamp(28px,3.2vw,34px); font-weight:650; letter-spacing:-.01em;
+    line-height:1.35; color:var(--ink);
+    margin:48px 0 26px;
+    text-wrap:balance;
+  }
+  /* 仅当标题确为容器首元素（无 hero 的降级头部）时才去掉上边距；
+     章节被 <section> 包裹时，h2 常是其 parent 的 first-child，不能因此清零上边距 */
+  .container>h2:first-child{margin-top:0}
+  h3{font-size:26px; font-weight:640; line-height:1.42; margin:44px 0 18px; color:var(--ink)}
+  /* 一级标题紧接二级标题时，二者同属一个章节组，间距收紧，避免出现「上方很紧、下方很大」的割裂感 */
+  h2+h3{margin-top:12px}
+  h4{font-size:24px; font-weight:640; margin:30px 0 14px; color:var(--ink)}
+  .conclusion-box h2{border-bottom:none;padding-bottom:0;margin:0 0 14px}
+
+  p{margin-bottom:20px; color:var(--ink)}
+  strong{font-weight:640; color:var(--ink)}
+  .lead{font-size:26px; line-height:1.75; color:var(--ink-2)}
+  .lead b{color:var(--ink)}
+
+  /* ---------- 列表（outside 编号必须靠 padding-left 兜住） ---------- */
+  ol,ul{padding-left:1.7em; margin-bottom:22px}
+  li{margin-bottom:10px; color:var(--ink); line-height:1.75}
+  li:last-child{margin-bottom:0}
+  li::marker{color:var(--ink-4)}
+
+  a{color:var(--accent-ink); text-decoration:none; border-bottom:1px solid var(--accent-line)}
+  a:hover{color:var(--accent)}
+
+  /* ---------- 涨跌语义（红涨绿跌） ---------- */
+  .up{color:var(--up); font-weight:640}
+  .down{color:var(--down); font-weight:640}
+
+  /* ---------- 数据标签 ---------- */
+  .tag{
+    display:inline-block; padding:1px 4px; border-radius:4px;
+    font-size:.92em; font-weight:600; line-height:1.6;
+  }
+  .tag-red{background:var(--up-soft); color:var(--up)}
+  .tag-green{background:var(--down-soft); color:var(--down)}
+  .tag-blue{background:var(--accent-soft); color:var(--accent-mute)}
+
+  /* ---------- 表格 ---------- */
+  .table-scroll{
+    overflow-x:auto; -webkit-overflow-scrolling:touch;
+    margin:26px 0; border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--surface);
+  }
+  .table-scroll table{width:100%; min-width:max-content; border-collapse:collapse; margin:0; font-size:21px}
+  /* 单列宽度上限约 15 个汉字，超出自动换行；仅当各列均不超 15 字但合计仍超宽时，才出现横向滚动 */
+  .table-scroll th,.table-scroll td{max-width:15em; overflow-wrap:break-word; word-break:break-word; white-space:normal}
+  th{
+    background:var(--surface-2); text-align:left; font-weight:640; font-size:19px;
+    color:var(--ink-2); padding:15px 20px; border-bottom:1px solid var(--line);
+  }
+  td{padding:15px 20px; border-bottom:1px solid var(--line-2); color:var(--ink); vertical-align:top; line-height:1.7}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr:hover td{background:var(--surface-3)}
+  td.num,th.num{text-align:right; font-family:var(--mono); font-size:20px; white-space:nowrap}
+  tr.hi td{background:var(--accent-soft)}
+  tr.hi td:first-child{font-weight:640; color:var(--accent-ink)}
+  caption{
+    caption-side:top; text-align:left; padding:18px 22px 16px; font-size:19px;
+    color:var(--ink-3); line-height:1.6; border-bottom:1px solid var(--line-2);
+  }
+  caption b{color:var(--ink)}
+
+  /* ---------- 长串兜底（2026-09-17；2026-09-18 由枚举式改为容器级继承）----------
+     原按 p/li/div/td/th 枚举，漏掉 h1–h6 等直接挂在 .container 下的标签：实测 360px 视口下
+     <h3>门 2：回复增强（run_summary_enhance.py）</h3> 内容溢出盒子 46px。
+     枚举必然漏（明天可能漏 blockquote/figure），改设在 .container 上由全部后代继承。 */
+  .container{overflow-wrap:anywhere}
+
+  /* ---------- KPI 指标条（严格限用：全报告 ≤1 组、每组 ≤4 项、仅报告级 headline 数字；
+     常规场景一律用下面的 .stat-strip。2026-10-16 用户反馈大卡片信息密度过低后收紧） ---------- */
+  .kpi{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; margin:28px 0}
+  .kpi__i{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-sm);
+    padding:14px 18px;
+  }
+  .kpi__v{
+    font-size:26px; font-weight:600; letter-spacing:-.02em;
+    color:var(--ink); line-height:1.2;
+  }
+  .kpi__v small{font-size:.55em; color:var(--ink-3); font-weight:400; margin-left:2px}
+  .kpi__v.up{color:var(--up)} .kpi__v.down{color:var(--down)}
+  .kpi__k{font-size:18px; color:var(--ink-3); margin-top:6px; line-height:1.5}
+  .kpi__d{font-size:18px; color:var(--ink-4); margin-top:4px; line-height:1.5}
+
+  /* ---------- 发丝线统计带（关键数字默认组件，2026-10-16 起；当日三次迭代定稿） ----------
+     四边闭合 1px 发丝线框（8px 圆角）+ 内部 1px 分隔线：外框用容器 border，内部线用
+     gap:1px + 容器底色透出（列天然等高、任意断点连续，不依赖 nth-child 数学；内容格白底）。
+     值 26px 加粗 + 17px 灰标签。约束：建议 3~6 项（≤6 项在 1140px 容器内单行排开）；超过 6 项改用表格。 */
+  .stat-strip{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1px;
+    margin:26px 0; background:rgba(11,11,11,.10);
+    border:1px solid rgba(11,11,11,.10); border-radius:8px; overflow:hidden;
+  }
+  .stat-strip__i{background:var(--surface); padding:14px 18px}
+  .stat-strip__v{font-size:26px; font-weight:600; letter-spacing:-.01em; color:var(--ink); line-height:1.25; font-variant-numeric:tabular-nums}
+  .stat-strip__v small{font-size:.55em; color:var(--ink-3); font-weight:400; margin-left:2px}
+  .stat-strip__v.up{color:var(--up)} .stat-strip__v.down{color:var(--down)}
+  .stat-strip__k{font-size:17px; color:var(--ink-3); margin-top:5px; line-height:1.5}
+
+  /* ---------- 纵向定性卡片列表（禁止桌面自动横排） ---------- */
+  .card-grid{display:grid; grid-template-columns:1fr; gap:18px; margin:28px 0}
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-sm);
+    padding:22px 24px; box-shadow:var(--shadow-1);
+  }
+  .card-title{font-size:22px; font-weight:600; color:var(--ink-3); margin-bottom:10px; letter-spacing:.02em}
+  .card-value{font-size:30px; font-weight:600; color:var(--ink); letter-spacing:-.01em; line-height:1.2}
+  .card-value.up{color:var(--up)} .card-value.down{color:var(--down)}
+  .card-sub{font-size:21px; color:var(--ink-3); margin-top:9px; line-height:1.65}
+
+  /* ---------- 结论 / 高亮 / 名词解释 ---------- */
+  .conclusion-box{
+    /* 有背景色的容器不再叠加左侧色条：底色已表达强调，双重信号冗余（2026-09-14 用户要求） */
+    background:var(--wash); border:1px solid var(--wash-line);
+    border-radius:var(--radius);
+    padding:30px 34px; margin:28px 0 42px;
+  }
+  .conclusion-box p:last-child{margin-bottom:0}
+  .highlight-box{
+    background:var(--wash); border:1px solid var(--wash-line);
+    border-radius:var(--radius); padding:22px 26px; margin:26px 0;
+  }
+  .highlight-box p:last-child{margin-bottom:0}
+  .highlight-box-red{
+    background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--up);
+    border-radius:var(--radius); padding:22px 26px; margin:26px 0;
+  }
+  .highlight-box-red p:last-child{margin-bottom:0}
+  .highlight-box-green{
+    background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--down);
+    border-radius:var(--radius); padding:22px 26px; margin:26px 0;
+  }
+  .highlight-box-green p:last-child{margin-bottom:0}
+  .concept-box{
+    background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--accent);
+    border-radius:var(--radius); padding:24px 28px; margin:26px 0;
+    box-shadow:var(--shadow-1);
+  }
+  .concept-box .concept-title{font-size:26px; font-weight:700; color:var(--ink); margin-bottom:10px; letter-spacing:.01em}
+  .concept-box h4{margin-top:12px; margin-bottom:6px}
+  .concept-box p:last-child{margin-bottom:0}
+
+  /* ---------- 分隔 ---------- */
+  .divider{height:1px; background:var(--line-2); margin:56px 0}
+
+  /* ---------- 来源列表 ---------- */
+  .source-list{
+    font-size:18px; color:var(--ink-3); margin-top:52px; padding-top:24px;
+    border-top:1px solid var(--line); line-height:1.7;
+  }
+  .source-list li{margin-bottom:7px; color:var(--ink-3); font-size:18px}
+  .source-list strong{color:var(--ink-2)}
+
+  /* ---------- 公式 ---------- */
+  .formula{background:transparent;border:none;padding:6px 0;margin:16px 0;text-align:center;overflow-x:auto;line-height:1.8}
+  mjx-container{font-size:105%}
+  mjx-container[display="true"]{margin:.6em 0}
+
+  /* ---------- 代码 ---------- */
+  code{
+    font-family:var(--mono); font-size:.86em; background:rgba(11,11,11,.05);
+    border:none; border-radius:4px; padding:.12em .38em; color:var(--ink);
+    overflow-wrap:break-word; word-break:break-all;
+  }
+  /* 代码块：Claude Desktop 的白色卡片（白底 + 1px 浅描边 + 全圆角，无阴影），
+     可选语法高亮 token 类的配色为 claude.ai 截图实测五色 */
+  .code-block{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);margin:20px 0;overflow:hidden;box-shadow:none}
+  .code-block summary{cursor:pointer;padding:12px 16px;color:var(--ink-3);font-size:17px;font-weight:500;user-select:none;list-style:none}
+  .code-block summary::-webkit-details-marker{display:none}
+  .code-block summary::before{content:"▸ ";color:var(--ink-4)}
+  .code-block[open] summary::before{content:"▾ "}
+  .code-block[open] summary{border-bottom:1px solid var(--line-2)}
+  .code-block pre{margin:0;padding:14px 16px;overflow-x:auto;max-height:400px;overflow-y:auto;background:var(--surface)}
+  .code-block code{
+    font-family:var(--mono); font-size:19px; line-height:1.6; color:var(--ink);
+    white-space:pre; background:transparent; border:none; padding:0; border-radius:0;
+  }
+  /* 可选语法高亮：给 <code> 内的片段包上对应类名即可；不标注则整段为墨色 */
+  .code-block .tok-keyword{color:#7C1AB0}
+  .code-block .tok-string{color:#197417}
+  .code-block .tok-func{color:#0F50AD}
+  .code-block .tok-num{color:#108080}
+  .code-block .tok-comment{color:#6D6B67}
+
+  /* ---------- CSS 流程图（白底/灰黑细边框/黑色字体/可折叠） ---------- */
+  details.flow-chart,details.ladder-diagram{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-sm);
+    margin:20px 0; overflow:hidden; box-shadow:var(--shadow-1);
+  }
+  details.flow-chart summary,details.ladder-diagram summary{
+    cursor:pointer; padding:17px 20px; font-size:20px; font-weight:600; color:var(--ink);
+    user-select:none; list-style:none;
+  }
+  details.flow-chart summary::-webkit-details-marker,details.ladder-diagram summary::-webkit-details-marker{display:none}
+  details.flow-chart summary::before,details.ladder-diagram summary::before{content:"\25B8 ";color:var(--ink-4);margin-right:4px}
+  details.flow-chart[open] summary::before,details.ladder-diagram[open] summary::before{content:"\25BE "}
+  .flow-body{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:16px 20px;overflow-x:auto}
+  .flow-node{
+    background:var(--surface); border:1px solid var(--line); border-radius:8px;
+    padding:7px 14px; font-size:.9em; color:var(--ink); white-space:nowrap; line-height:1.5;
+  }
+  .flow-arrow{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;color:var(--ink-4);line-height:1}
+  .flow-arrow .arrow-label{font-size:15px;color:var(--ink-3);white-space:nowrap;line-height:1.3;margin-bottom:3px}
+  .flow-arrow .arrow-line{width:36px;height:1px;background:rgba(11,11,11,.18);position:relative}
+  .flow-arrow .arrow-line::after{
+    content:""; position:absolute; right:-1px; top:50%; transform:translateY(-50%);
+    border-left:7px solid #C7C7C2; border-top:4px solid transparent; border-bottom:4px solid transparent;
+  }
+  .flow-step{display:flex; align-items:baseline; gap:10px; margin-bottom:10px}
+  .flow-num{flex:none; font-weight:400; color:var(--ink)}
+  .flow-content{flex:1}
+  .ladder-body{padding:16px 20px;overflow-x:auto}
+  .ladder-diagram table{border-collapse:collapse;min-width:max-content}
+  .ladder-diagram td{padding:5px 10px;color:var(--ink);font-size:20px;vertical-align:middle;text-align:center;white-space:nowrap;border-bottom:none}
+  .ladder-diagram .rail{border-right:2px solid var(--line);width:6px;padding:0}
+  .ladder-diagram .contact-no{border:1px solid var(--ink);border-radius:4px;color:var(--ink)}
+  .ladder-diagram .contact-nc{border:1px solid var(--ink-4);border-radius:4px;color:var(--ink-3)}
+  .ladder-diagram .coil{border:1px solid var(--ink);border-radius:24px;color:var(--ink)}
+  .ladder-diagram .wire-h{border-top:1px solid var(--ink-4);min-width:24px;height:1px}
+  .ladder-diagram .label{color:var(--ink-3);font-size:12px}
+
+  /* ---------- 分层架构图：纵向层栈 + 层间箭头 + 侧路层（替代 ASCII 架构图） ---------- */
+  .arch-diagram{margin:22px 0;display:flex;flex-direction:column}
+  .arch-layer{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-sm);
+    padding:15px 18px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+  }
+  .arch-layer-name{font-weight:640;color:var(--ink);line-height:1.5}
+  .arch-layer-desc{color:var(--ink-3);font-size:.82em;line-height:1.55}
+  .arch-layer--side{border-style:dashed;border-left:3px solid var(--accent)}
+  .arch-layer+.arch-layer{margin-top:-1px}
+  .arch-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;margin-top:4px}
+  .arch-col{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--surface)}
+  .arch-col-name{font-weight:640;color:var(--ink);line-height:1.5}
+  .arch-col-desc{color:var(--ink-3);font-size:.78em;line-height:1.55}
+  .arch-arrow{display:flex;flex-direction:column;align-items:center;justify-content:center;height:42px;gap:4px;line-height:1}
+  .arch-arrow-label{font-size:15px;color:var(--ink-3);white-space:nowrap;line-height:1.3}
+  .arch-arrow-line{width:1px;height:15px;background:rgba(11,11,11,.25);position:relative}
+  .arch-arrow-line::after{
+    content:""; position:absolute; left:50%; bottom:-1px; transform:translateX(-50%);
+    border-left:4.5px solid transparent; border-right:4.5px solid transparent; border-top:7px solid #C7C7C2;
+  }
+  .arch-note{color:var(--ink-4);font-size:.78em;line-height:1.6;margin:10px 2px 0}
+  @media (max-width:640px){ .arch-cols{grid-template-columns:1fr} }
+
+  /* ascii-diagram 已弃用，保留样式仅为兼容历史报告，新报告禁止再使用 */
+  .ascii-diagram{position:relative;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius-sm);margin:16px 0;overflow:hidden}
+  .ascii-diagram pre{margin:0;padding:16px 20px;overflow-x:auto;font-family:var(--mono);font-size:24px;line-height:1.6;color:var(--ink);white-space:pre}
+
+  /* ---------- 侧边目录 ---------- */
+  .toc-toggle{
+    position:fixed; bottom:18px; left:18px; z-index:100;
+    width:28px; height:28px; padding:0; border:none; cursor:pointer;
+    background:transparent; color:var(--ink-3);
+    display:flex; align-items:center; justify-content:center;
+    transition:color .15s, left .26s ease;
+  }
+  .toc-toggle:hover{color:var(--accent)}
+  .toc-toggle svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round}
+  body.toc-open .toc-toggle{left:340px}
+  .toc-sidebar{
+    position:fixed; top:0; left:-340px; width:320px; height:100vh;
+    background:var(--surface); border-right:1px solid var(--line);
+    box-shadow:2px 0 12px rgba(11,11,11,.07);
+    overflow-y:auto; overscroll-behavior:contain; z-index:99;
+    padding:34px 20px 28px; font-size:17px;
+    transition:left .26s ease;
+  }
+  .toc-sidebar.open{left:0}
+  .toc-sidebar .toc-heading{
+    font-size:16px; font-weight:700; color:var(--ink-4);
+    letter-spacing:.15em; text-transform:uppercase;
+    margin-bottom:14px; padding:0 0 12px 12px; border-bottom:1px solid var(--line-2);
+  }
+  .toc-sidebar a{
+    display:block; padding:6px 10px 6px 12px; color:var(--ink-2); text-decoration:none;
+    border-bottom:none; border-left:2px solid transparent; border-radius:8px;
+    line-height:1.45; transition:.15s;
+  }
+  .toc-sidebar a:hover{background:var(--surface-2); color:var(--ink)}
+  .toc-sidebar a.toc-l1{font-weight:600; margin-top:6px; color:var(--ink)}
+  .toc-sidebar a.toc-l2{margin-left:10px; padding-left:16px; font-size:16px; color:var(--ink-3); border-left:1px solid var(--line-2)}
+  .toc-sidebar a.active{background:transparent; color:var(--accent-ink); border-left-color:var(--accent); font-weight:600}
+  .toc-sidebar a.toc-l2.active{border-left-width:2px; padding-left:15px}
+  h2[id],h3[id]{scroll-margin-top:30px}
+
+  @media (max-width:1500px){
+    body.toc-open{padding-left:0}
+    body.toc-open .toc-toggle{left:18px}
+    .toc-sidebar{box-shadow:0 0 44px rgba(11,11,11,.14)}
+  }
+  @media (max-width:640px){
+    body{font-size:21px}
+    .card-title{font-size:20px}
+    .card-sub{font-size:19px}
+    .container{padding:20px 18px 52px}
+    .hero{padding:34px 22px 30px}
+    h2{margin:56px 0 26px}
+    .kpi{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+    .kpi__v{font-size:22px}
+    .stat-strip{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+    .stat-strip__v{font-size:22px}
+    .stat-strip__k{font-size:16px}
+  }
+  @media print{
+    .toc-sidebar,.toc-toggle{display:none}
+    body{padding-left:0; background:#fff}
+    .container{max-width:none; padding:0}
+    .card,.kpi__i,.table-scroll,details.flow-chart{box-shadow:none}
+  }
+
+  /* ---------- 窄视口宽度契约（≤1024px，2026-09-16 实测确立） ----------
+     档 A（<1024px）：表格改由容器定宽、单元格强制换行。min-width:max-content 会让 table
+     无视容器宽度（实测：640px 视口下表格仍为 1071px）；这些宽度下不给横向滚动，改换行。
+     档 B（≥1024px）：保留 min-width:max-content + .table-scroll 横向滚动，避免压成窄条。 */
+  @media (max-width:1023px){
+    .table-scroll table{min-width:100%}
+    .table-scroll th,.table-scroll td{max-width:14em; padding:12px 14px}
+    img,svg,pre,table{max-width:100%}
+  }
+  /* 折行规则按 pre/code 元素本身兜底：实测 highlight-box 内的 <pre><code> 宽 752px、
+     超出容器 157px，而它不在 .code-block 内，只针对 .code-block 的规则拦不住。 */
+  pre code{white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word}
+  /* pre 自身也必须折行：max-width 只收盒子、不拦内容——裸 <pre>（内部无 <code>）的长行
+     会直接画到容器外（实测内容宽 4154px / 盒子 992px），只加 max-width 拦不住 */
+  pre{max-width:100%; white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word}
+
+  /* ===== 宽度契约修正（2026-09-16）=====
+     ① 目击实录：报告里出现了内联 <code> 宽 1508px、超出容器 401px 的横向滚动区（长 JSON 行不折行）。
+     ② 目击实录：视口 >1500px 时打开侧边目录，1140 正文被 padding 推到视口右侧外面。 */
+  /* ① 代码块内长行折行，杜绝块内横向滚动区（短行不受影响） */
+  .code-block code{white-space:pre-wrap}
+  .ascii-diagram code,.ascii-diagram pre{white-space:pre-wrap; overflow-wrap:anywhere}
+  /* ② 目录展开时用「剩余空间」重新居中，任何视口宽度下正文都不越出视口 */
+  body.toc-open .container{margin-left:340px; margin-right:0; max-width:min(1140px, calc(100vw - 340px - 64px))}
+  /* ≤1500px 时目录是浮层，不占位：取消上一行的左移与收缩，否则会把正文推出视口 */
+  @media (max-width:1500px){
+    body.toc-open .container{margin-left:auto; margin-right:auto; max-width:1140px}
+  }
+  /* ===== 图片排版（2026-09-18 用户要求）=====
+     图片一律用 <figure> 包裹：图片水平居中、底部居中图注，图注字号为正文的 70%。
+     figure 挂在正文流里继承 body 字号，故 .7em 即正文字号的 70%（25px→17.5px、
+     窄屏 21px→14.7px），无需在媒体查询里各写一档。 */
+  .container figure{margin:26px 0; text-align:center}
+  .container figure img{display:block; margin:0 auto}
+  .container figcaption{margin-top:12px; font-size:.7em; line-height:1.6; color:var(--ink-3); text-align:center}
+  /* ===== 图片单击放大预览（lightbox，模板内置）=====
+     单击正文图片：从原位置动画放大到视口中央；再单击预览层任意处：动画缩回原位。
+     动画只走 transform（合成层），不逐帧重排/重采样，放大与缩回两个方向都顺滑。
+     单击图片不再触发外层 <a> 跳转（跳转会让预览无法单击触发）；右键菜单不受影响。 */
+  .container img{cursor:zoom-in}
+  body.imgz-open{overflow:hidden}
+  .imgz-overlay{position:fixed; left:0; top:0; right:0; bottom:0; z-index:9999;
+    background:rgba(11,11,11,.78); opacity:0; transition:opacity .24s ease;
+    -webkit-user-select:none; user-select:none}
+  .imgz-overlay.imgz-in{opacity:1}
+  .imgz-overlay img{position:fixed; margin:0; max-width:none; max-height:none; cursor:zoom-out;
+    transform-origin:0 0; will-change:transform;
+    transition:transform .34s cubic-bezier(.22,.61,.36,1)}
+</style>
+<style>
+/* 学习进度页一次性样式（html-report extra css） */
+.study-progress{
+  position:sticky; top:0; z-index:40;
+  background:rgba(255,255,255,.96);
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  border:1px solid var(--line); border-radius:8px;
+  padding:16px 20px; margin:0 0 30px; box-shadow:var(--shadow-1);
+}
+.study-progress__top{display:flex; align-items:baseline; justify-content:space-between; gap:16px}
+.study-progress__count{font-size:30px; font-weight:650; color:var(--ink); font-variant-numeric:tabular-nums; line-height:1.2}
+.study-progress__total{font-size:19px; font-weight:400; color:var(--ink-3)}
+.study-progress__pct{font-size:22px; font-weight:640; color:var(--accent-ink); font-variant-numeric:tabular-nums}
+.progress-track{height:8px; background:var(--surface-2); border:1px solid var(--line-2); border-radius:999px; margin:10px 0 12px; overflow:hidden}
+.progress-fill{height:100%; width:0; background:var(--accent); border-radius:999px; transition:width .25s ease}
+.study-progress__bottom{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap}
+.study-progress__next{font-size:19px; color:var(--ink-3); line-height:1.5}
+.study-progress__next strong{color:var(--ink); font-weight:640}
+.study-progress__actions{display:flex; gap:10px; flex-wrap:wrap}
+.btn{font-family:inherit; font-size:19px; line-height:1.2; padding:10px 16px; border-radius:8px; border:1px solid var(--line); cursor:pointer; transition:background .18s ease,color .18s ease,border-color .18s ease}
+.btn-primary{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:640}
+.btn-primary:hover{background:var(--accent-deep); border-color:var(--accent-deep)}
+.btn-primary:disabled{opacity:.45; cursor:not-allowed}
+.btn-ghost{background:var(--surface); color:var(--ink-3)}
+.btn-ghost:hover{background:var(--surface-2); color:var(--ink)}
+table.todo-table{table-layout:fixed; min-width:0; width:100%}
+.table-scroll table.todo-table{min-width:0; table-layout:fixed}
+.table-scroll table.todo-table th,.table-scroll table.todo-table td{padding:14px 16px; max-width:none}
+.table-scroll table.todo-table .todo-num{width:56px; padding-left:18px; color:var(--ink-4); font-family:var(--mono); font-size:18px; font-weight:600; vertical-align:top}
+.table-scroll table.todo-table .todo-link-col{width:118px}
+.table-scroll table.todo-table .todo-check-col{width:104px}
+.todo-title{font-size:21px; font-weight:640; color:var(--ink); line-height:1.5}
+.todo-desc{font-size:20px; color:var(--ink-3); line-height:1.65; margin-top:5px}
+.todo-desc--muted{font-size:18px; color:var(--ink-4); margin-top:4px}
+.todo-domain{font-size:17px; color:var(--ink-4); margin-top:6px; line-height:1.4; word-break:break-all}
+.open-link{display:inline-block; font-size:18px; font-weight:600; color:var(--accent-ink); border:1px solid var(--accent-line); border-radius:6px; padding:6px 10px; line-height:1.2; white-space:nowrap; background:var(--surface)}
+.open-link:hover{background:var(--accent-soft); color:var(--accent-deep); border-color:var(--accent)}
+.todo-checkbox{display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-size:18px; color:var(--ink-3); white-space:nowrap; user-select:none}
+.todo-checkbox input{width:22px; height:22px; accent-color:var(--accent); cursor:pointer; flex:0 0 auto}
+.todo-row.is-done .todo-title{color:var(--ink-4)}
+.todo-row.is-done .todo-desc{color:var(--ink-4)}
+.todo-row.is-done .open-link{color:var(--ink-4); border-color:var(--line)}
+.todo-row.is-done .todo-checkbox__text{color:var(--accent-ink)}
+.todo-row.is-next td{background:var(--accent-soft)}
+.todo-row.is-next td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+.todo-row.is-next .todo-title{color:var(--accent-ink)}
+.todo-note td{background:var(--surface-2); font-size:19px; color:var(--ink-3); line-height:1.65}
+.todo-note strong{color:var(--ink)}
+.date-meta .meta-stats{display:none}
+h2[id],h3[id]{scroll-margin-top:140px}
+@media (max-width:720px){
+  .study-progress{position:static; padding:14px 16px}
+  .study-progress__count{font-size:26px}
+  .study-progress__pct{font-size:20px}
+  .study-progress__bottom{align-items:flex-start; flex-direction:column}
+  .study-progress__actions{width:100%}
+  .btn{flex:1}
+  .table-scroll table.todo-table{min-width:0; table-layout:auto}
+  .table-scroll table.todo-table thead{display:none}
+  .table-scroll table.todo-table,.table-scroll table.todo-table tbody,.table-scroll table.todo-table tr,.table-scroll table.todo-table td{display:block; width:100%}
+  .table-scroll table.todo-table tr{border-bottom:1px solid var(--line); padding:14px 16px}
+  .table-scroll table.todo-table tr:last-child{border-bottom:0}
+  .table-scroll table.todo-table td{border:0; padding:0; max-width:none}
+  .table-scroll table.todo-table .todo-num{width:auto; padding-left:0; font-size:16px; margin-bottom:4px}
+  .table-scroll table.todo-table .todo-link-col,.table-scroll table.todo-table .todo-check-col{display:inline-block; width:auto; margin-top:10px; margin-right:16px}
+  .table-scroll table.todo-table .todo-main{width:auto}
+  .todo-row.is-next td{background:transparent}
+  .todo-row.is-next{background:var(--accent-soft); box-shadow:inset 3px 0 0 var(--accent)}
+  .todo-row.is-next td:first-child{box-shadow:none}
+  .todo-note td{background:transparent}
+  h2[id],h3[id]{scroll-margin-top:30px}
+}
+</style>
+</head>
+<body>
+<button class="toc-toggle" id="tocToggle" aria-label="打开目录">
+    <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="16" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/></svg>
+  </button>
+<nav class="toc-sidebar" id="tocSidebar" aria-label="报告目录">
+  <div class="toc-heading">报告目录</div>
+</nav>
+
+<div class="container">
+<header class="hero">
+<h1>Gefei SEO 学习路线</h1>
+<p class="hero__lede">按《gefei教程文字版》原文顺序整理的<strong>22 个学习节点</strong>。勾选即记录进度，下次打开自动恢复。</p>
+<div class="date-meta"><strong>2026年10月19日 21:41</strong><span class="meta-stats"></span><span class="meta-version"> | v1版</span><span class="meta-agent"> | Claude Code 产出</span></div>
+</header>
+
+<div class="study-progress" id="studyProgress">
+  <div class="study-progress__top">
+    <div class="study-progress__count"><span id="doneCount">0</span><span class="study-progress__total"> / 22 已完成</span></div>
+    <div class="study-progress__pct" id="donePct">0%</div>
+  </div>
+  <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="22" aria-valuenow="0" aria-label="学习进度"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="study-progress__bottom">
+    <div class="study-progress__next" id="nextHint">下一项：<strong>01 · Ahrefs 公开课程</strong></div>
+    <div class="study-progress__actions">
+      <button class="btn btn-primary" id="continueBtn" type="button" data-url="https://ahrefs.com/zh/seo">继续学习</button>
+      <button class="btn btn-ghost" id="resetBtn" type="button">重置进度</button>
+    </div>
+  </div>
+</div>
+
+<h2 id="route">学习路线</h2>
+<p>按原文顺序，从 Ahrefs 公开课开始，逐步进入需求挖掘、关键词判断、上站与工具站。</p>
+<table class="todo-table">
+  <thead>
+    <tr><th class="todo-num">#</th><th>学习内容</th><th class="todo-link-col">链接</th><th class="todo-check-col">完成</th></tr>
+  </thead>
+  <tbody>
+      <tr class="todo-row" data-id="01" data-url="https://ahrefs.com/zh/seo" data-title="Ahrefs 公开课程">
+        <td class="todo-num">01</td>
+        <td class="todo-main">
+          <div class="todo-title">Ahrefs 公开课程 <span class="tag tag-blue">必看</span></div>
+        <div class="todo-desc">新手入门，先把这个 Ahrefs 的公开课程过一遍。不需要读懂，大概读一遍，了解一下 SEO 的概念就行。</div>
+        <div class="todo-desc todo-desc--muted">作者在文末再次强调：基础中的基础，必看教程。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://ahrefs.com/zh/seo" target="_blank" rel="noopener noreferrer">打开课程</a><div class="todo-domain">ahrefs.com</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="01" aria-label="标记第 1 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="02" data-url="https://new.web.cafe/tutorial/0c91c83924e9495aa75384becf6304ff" data-title="SEO 进阶教程">
+        <td class="todo-num">02</td>
+        <td class="todo-main">
+          <div class="todo-title">SEO 进阶教程</div>
+        <div class="todo-desc">然后看这个进阶教程。这个阶段也不需要仔细研究，就是看，就是了解。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/tutorial/0c91c83924e9495aa75384becf6304ff" target="_blank" rel="noopener noreferrer">打开教程</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="02" aria-label="标记第 2 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="03" data-url="https://new.web.cafe/tutorial/7c36c9a7c6e34d21b8f3efd857d980aa" data-title="作者写的新手入门">
+        <td class="todo-num">03</td>
+        <td class="todo-main">
+          <div class="todo-title">作者写的新手入门</div>
+        <div class="todo-desc">再回过头来看作者写的新手入门。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/tutorial/7c36c9a7c6e34d21b8f3efd857d980aa" target="_blank" rel="noopener noreferrer">打开教程</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="03" aria-label="标记第 3 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="04" data-url="https://new.web.cafe/tutorial/89afd4d0414d41e6b5f9304ee42df055" data-title="挖掘需求教程 · 第一篇">
+        <td class="todo-num">04</td>
+        <td class="todo-main">
+          <div class="todo-title">挖掘需求教程 · 第一篇</div>
+        <div class="todo-desc">之后再看挖掘需求相关的教程。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/tutorial/89afd4d0414d41e6b5f9304ee42df055" target="_blank" rel="noopener noreferrer">打开教程</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="04" aria-label="标记第 4 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="05" data-url="https://new.web.cafe/tutorial/detail/fp0zl0dtob" data-title="挖掘需求教程 · 第二篇">
+        <td class="todo-num">05</td>
+        <td class="todo-main">
+          <div class="todo-title">挖掘需求教程 · 第二篇</div>
+        <div class="todo-desc">挖掘需求相关的第二篇教程。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/tutorial/detail/fp0zl0dtob" target="_blank" rel="noopener noreferrer">打开教程</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="05" aria-label="标记第 5 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="06" data-url="https://new.web.cafe/tutorial/detail/7v7tfjneg9" data-title="判断关键词是否可做 · 教程">
+        <td class="todo-num">06</td>
+        <td class="todo-main">
+          <div class="todo-title">判断关键词是否可做 · 教程</div>
+        <div class="todo-desc">再看如何判断关键词是否可做。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/tutorial/detail/7v7tfjneg9" target="_blank" rel="noopener noreferrer">打开教程</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="06" aria-label="标记第 6 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="07" data-url="https://new.web.cafe/search?q=%E5%88%A4%E6%96%AD" data-title="判断关键词是否可做 · 站内搜索">
+        <td class="todo-num">07</td>
+        <td class="todo-main">
+          <div class="todo-title">判断关键词是否可做 · 站内搜索</div>
+        <div class="todo-desc">作者给出的站内搜索入口，关键词为「判断」。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/search?q=%E5%88%A4%E6%96%AD" target="_blank" rel="noopener noreferrer">打开搜索</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="07" aria-label="标记第 7 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="08" data-url="https://new.web.cafe/tutorial/detail/sk5je1bj0f" data-title="上站之后要做什么">
+        <td class="todo-num">08</td>
+        <td class="todo-main">
+          <div class="todo-title">上站之后要做什么</div>
+        <div class="todo-desc">再看上站之后要做什么；再次详解谷歌搜索排名；以月收入 $50k 的网站为例说明。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/tutorial/detail/sk5je1bj0f" target="_blank" rel="noopener noreferrer">打开教程</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="08" aria-label="标记第 8 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="09" data-url="https://new.web.cafe/tutorial/detail/5yyr7zjxk7" data-title="工具落地页要如何设计">
+        <td class="todo-num">09</td>
+        <td class="todo-main">
+          <div class="todo-title">工具落地页要如何设计</div>
+        <div class="todo-desc">再看工具落地页要如何设计。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/tutorial/detail/5yyr7zjxk7" target="_blank" rel="noopener noreferrer">打开教程</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="09" aria-label="标记第 9 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="10" data-url="https://new.web.cafe/tutorial/detail/za408lc1q9" data-title="如何做精品工具站">
+        <td class="todo-num">10</td>
+        <td class="todo-main">
+          <div class="todo-title">如何做精品工具站</div>
+        <div class="todo-desc">再聊基于精品工具页面思路，如何做精品工具站。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/tutorial/detail/za408lc1q9" target="_blank" rel="noopener noreferrer">打开教程</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="10" aria-label="标记第 10 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="11" data-url="https://new.web.cafe/tutorial/7PG1iQzr3sXx1tyKmf9ZYd" data-title="养网站防老系列 · 全流程">
+        <td class="todo-num">11</td>
+        <td class="todo-main">
+          <div class="todo-title">养网站防老系列 · 全流程</div>
+        <div class="todo-desc">最后跟着养网站防老系列走一遍全流程。也可以先看教程，看完一遍之后再跟着一步一步走。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/tutorial/7PG1iQzr3sXx1tyKmf9ZYd" target="_blank" rel="noopener noreferrer">打开教程</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="11" aria-label="标记第 11 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="12" data-url="https://new.web.cafe/experience/ao30ki8tzk" data-title="加外链 · 博客评论外链">
+        <td class="todo-num">12</td>
+        <td class="todo-main">
+          <div class="todo-title">加外链 · 博客评论外链</div>
+        <div class="todo-desc">加外链。博客评论外链依然还有用。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/experience/ao30ki8tzk" target="_blank" rel="noopener noreferrer">打开教程</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="12" aria-label="标记第 12 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="13" data-url="https://new.web.cafe/topic/xoi32sha0d" data-title="加外链 · 相关话题">
+        <td class="todo-num">13</td>
+        <td class="todo-main">
+          <div class="todo-title">加外链 · 相关话题</div>
+        <div class="todo-desc">加外链相关话题。博客评论外链依然还有用。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/topic/xoi32sha0d" target="_blank" rel="noopener noreferrer">打开话题</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="13" aria-label="标记第 13 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="14" data-url="https://new.web.cafe/tutorials" data-title="教程栏目">
+        <td class="todo-num">14</td>
+        <td class="todo-main">
+          <div class="todo-title">教程栏目</div>
+        <div class="todo-desc">教程栏目，都值得学习。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/tutorials" target="_blank" rel="noopener noreferrer">打开栏目</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="14" aria-label="标记第 14 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-note"><td colspan="4"><strong>作者提醒：</strong>多看论坛的文章，学会找词，遇到问题群里去问，多实践，多在群里交流。</td></tr>
+      <tr class="todo-row" data-id="15" data-url="https://new.web.cafe/topic/bgwrjx3one" data-title="领取两套源代码">
+        <td class="todo-num">15</td>
+        <td class="todo-main">
+          <div class="todo-title">领取两套源代码</div>
+        <div class="todo-desc">你可以到这里领取两套源代码。不过，这两份代码都不建议新手学习期去部署使用，建议先从更简单的单页静态网站开始做起来练手。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/topic/bgwrjx3one" target="_blank" rel="noopener noreferrer">领取源码</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="15" aria-label="标记第 15 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+  </tbody>
+</table>
+
+<h2 id="ahrefs">基础必读 · Ahrefs 官方博客 7 篇</h2>
+<p>第一个教程，<a href="https://ahrefs.com/zh/seo" target="_blank" rel="noopener noreferrer">Ahrefs 公开课程</a>是基础中的基础，必看教程。下面 7 篇按原文顺序排列。</p>
+<table class="todo-table">
+  <thead>
+    <tr><th class="todo-num">#</th><th>学习内容</th><th class="todo-link-col">链接</th><th class="todo-check-col">完成</th></tr>
+  </thead>
+  <tbody>
+      <tr class="todo-row" data-id="16" data-url="https://ahrefs.com/blog/zh/how-do-search-engines-work/" data-title="第一篇：搜索引擎如何工作的以及你为什么要在意？">
+        <td class="todo-num">16</td>
+        <td class="todo-main">
+          <div class="todo-title">第一篇：搜索引擎如何工作的以及你为什么要在意？</div>
+          <div class="todo-desc todo-desc--muted">Ahrefs 官方博客</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://ahrefs.com/blog/zh/how-do-search-engines-work/" target="_blank" rel="noopener noreferrer">阅读文章</a><div class="todo-domain">ahrefs.com</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="16" aria-label="标记第 16 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="17" data-url="https://ahrefs.com/blog/zh/seo-basics/" data-title="第二篇：SEO 基础：新手 SEO 成功指南">
+        <td class="todo-num">17</td>
+        <td class="todo-main">
+          <div class="todo-title">第二篇：SEO 基础：新手 SEO 成功指南</div>
+          <div class="todo-desc todo-desc--muted">Ahrefs 官方博客</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://ahrefs.com/blog/zh/seo-basics/" target="_blank" rel="noopener noreferrer">阅读文章</a><div class="todo-domain">ahrefs.com</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="17" aria-label="标记第 17 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="18" data-url="https://ahrefs.com/blog/zh/keyword-research/" data-title="第三篇：如何进行 SEO 关键词研究（入门指南）">
+        <td class="todo-num">18</td>
+        <td class="todo-main">
+          <div class="todo-title">第三篇：如何进行 SEO 关键词研究（入门指南）</div>
+          <div class="todo-desc todo-desc--muted">Ahrefs 官方博客</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://ahrefs.com/blog/zh/keyword-research/" target="_blank" rel="noopener noreferrer">阅读文章</a><div class="todo-domain">ahrefs.com</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="18" aria-label="标记第 18 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="19" data-url="https://ahrefs.com/blog/seo-content/" data-title="第四篇：SEO Content: The Beginner’s Guide（只有英文版）">
+        <td class="todo-num">19</td>
+        <td class="todo-main">
+          <div class="todo-title">第四篇：SEO Content: The Beginner’s Guide（只有英文版）</div>
+          <div class="todo-desc todo-desc--muted">Ahrefs 官方博客</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://ahrefs.com/blog/seo-content/" target="_blank" rel="noopener noreferrer">阅读文章</a><div class="todo-domain">ahrefs.com</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="19" aria-label="标记第 19 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="20" data-url="https://ahrefs.com/blog/zh/on-page-seo/" data-title="第五篇：On-Page SEO：什么是页面优化？如何进行页面优化？（附清单）">
+        <td class="todo-num">20</td>
+        <td class="todo-main">
+          <div class="todo-title">第五篇：On-Page SEO：什么是页面优化？如何进行页面优化？（附清单）</div>
+          <div class="todo-desc todo-desc--muted">Ahrefs 官方博客</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://ahrefs.com/blog/zh/on-page-seo/" target="_blank" rel="noopener noreferrer">阅读文章</a><div class="todo-domain">ahrefs.com</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="20" aria-label="标记第 20 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="21" data-url="https://ahrefs.com/blog/zh/link-building/" data-title="第六篇：SEO 链接建设：初学者指南">
+        <td class="todo-num">21</td>
+        <td class="todo-main">
+          <div class="todo-title">第六篇：SEO 链接建设：初学者指南</div>
+          <div class="todo-desc todo-desc--muted">Ahrefs 官方博客</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://ahrefs.com/blog/zh/link-building/" target="_blank" rel="noopener noreferrer">阅读文章</a><div class="todo-domain">ahrefs.com</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="21" aria-label="标记第 21 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="22" data-url="https://ahrefs.com/blog/zh/technical-seo/" data-title="第七篇：技术 SEO 初学者指南">
+        <td class="todo-num">22</td>
+        <td class="todo-main">
+          <div class="todo-title">第七篇：技术 SEO 初学者指南</div>
+          <div class="todo-desc todo-desc--muted">Ahrefs 官方博客</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://ahrefs.com/blog/zh/technical-seo/" target="_blank" rel="noopener noreferrer">阅读文章</a><div class="todo-domain">ahrefs.com</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="22" aria-label="标记第 22 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+  </tbody>
+</table>
+
+<div class="source-list">
+  <p><strong>资料来源：</strong>gefei教程文字版.txt（本地文件）。学习顺序与每条说明均按原文整理。</p>
+  <p><strong>进度说明：</strong>勾选状态保存在当前浏览器的 localStorage，不会上传到服务器；换浏览器或清除站点数据后需要重新勾选。</p>
+  <p><strong>整理说明：</strong>Ahrefs 公开课程在原文中出现两次，已在第 1 项与「基础必读」开头合并展示；第二部分原文仅提供篇目标题，未附额外说明。</p>
+</div>
+
+<script>
+(function(){
+  var STORAGE_KEY = 'gefei-learn-progress-v1';
+  var rows = Array.prototype.slice.call(document.querySelectorAll('tr.todo-row'));
+  var done = {};
+  try {
+    var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    if (Array.isArray(saved)) saved.forEach(function(id){ done[String(id)] = true; });
+  } catch (e) {}
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function update(){
+    var count = 0;
+    var nextRow = null;
+    rows.forEach(function(row){
+      var id = row.getAttribute('data-id');
+      var isDone = !!done[id];
+      var toggle = row.querySelector('.done-toggle');
+      toggle.checked = isDone;
+      row.classList.toggle('is-done', isDone);
+      row.classList.remove('is-next');
+      row.querySelector('.todo-checkbox__text').textContent = isDone ? '已完成' : '未完成';
+      if (isDone) { count++; } else if (!nextRow) { nextRow = row; }
+    });
+    if (nextRow) nextRow.classList.add('is-next');
+    var total = rows.length;
+    var pct = total ? Math.round(count / total * 100) : 0;
+    document.getElementById('doneCount').textContent = count;
+    document.getElementById('donePct').textContent = pct + '%';
+    document.getElementById('progressFill').style.width = pct + '%';
+    var bar = document.querySelector('.progress-track');
+    if (bar) bar.setAttribute('aria-valuenow', String(count));
+
+    var hint = document.getElementById('nextHint');
+    var btn = document.getElementById('continueBtn');
+    if (nextRow) {
+      hint.innerHTML = '下一项：<strong>' + escapeHtml(nextRow.getAttribute('data-id')) + ' · ' + escapeHtml(nextRow.getAttribute('data-title')) + '</strong>';
+      btn.textContent = '继续学习';
+      btn.disabled = false;
+      btn.setAttribute('data-url', nextRow.getAttribute('data-url'));
+    } else {
+      hint.innerHTML = '全部完成，复习一遍或重置进度重新开始。';
+      btn.textContent = '已全部完成';
+      btn.disabled = true;
+      btn.removeAttribute('data-url');
+    }
+  }
+
+  function save(){
+    try {
+      var ids = Object.keys(done).filter(function(k){ return done[k]; });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+    } catch (e) {}
+  }
+
+  rows.forEach(function(row){
+    var toggle = row.querySelector('.done-toggle');
+    toggle.addEventListener('change', function(){
+      var id = row.getAttribute('data-id');
+      if (toggle.checked) done[id] = true; else delete done[id];
+      save();
+      update();
+    });
+  });
+
+  var continueBtn = document.getElementById('continueBtn');
+  continueBtn.addEventListener('click', function(){
+    var url = continueBtn.getAttribute('data-url');
+    if (!url) return;
+    var next = document.querySelector('tr.todo-row.is-next');
+    if (next) next.scrollIntoView({behavior:'smooth', block:'center'});
+    window.open(url, '_blank', 'noopener');
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    if (!confirm('确定要清空所有学习进度吗？此操作不可撤销。')) return;
+    done = {};
+    save();
+    update();
+  });
+
+  var tocHeading = document.querySelector('.toc-heading');
+  if (tocHeading) tocHeading.textContent = '学习目录';
+
+  update();
+})();
+</script>
+</div>
+<script>
+// 自动生成侧边目录：扫描正文 h2/h3（h2 一级、h3 二级），必须在滚动高亮初始化之前执行
+(function(){
+  var sidebar = document.getElementById("tocSidebar");
+  if(!sidebar) return;
+  var headings = document.querySelectorAll(".container h2[id], .container h3[id]");
+  for (var i = 0; i < headings.length; i++) {
+    var h = headings[i];
+    var a = document.createElement("a");
+    a.setAttribute("href", "#" + h.id);
+    a.textContent = h.textContent;
+    a.className = h.tagName === "H3" ? "toc-l2" : "toc-l1";
+    sidebar.appendChild(a);
+  }
+})();
+
+(function(){
+  var btn = document.getElementById("tocToggle");
+  var sidebar = document.getElementById("tocSidebar");
+  function toggle(force){
+    var open = force !== undefined ? force : !sidebar.classList.contains("open");
+    sidebar.classList.toggle("open", open);
+    document.body.classList.toggle("toc-open", open);
+  }
+  btn.addEventListener("click", function(e){ e.stopPropagation(); toggle(); });
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape") toggle(false); });
+  document.addEventListener("click", function(e){
+    if(!sidebar.contains(e.target) && e.target !== btn){ toggle(false); }
+  });
+    var navItems = Array.prototype.slice.call(document.querySelectorAll(".toc-sidebar a")).map(function(a){
+    var t = document.getElementById(a.getAttribute("href").slice(1));
+    return t ? { link: a, target: t } : null;
+  }).filter(Boolean);
+  // Sort by physical position so scroll-spy works regardless of TOC order
+  navItems.sort(function(a, b){ return a.target.offsetTop - b.target.offsetTop; });
+  function onScroll(){
+    var pos = window.scrollY + 60;
+    var idx = 0;
+    for(var i=0;i<navItems.length;i++){ if(navItems[i].target.offsetTop <= pos) idx = i; }
+    navItems.forEach(function(item){ item.link.classList.remove("active"); });
+    if(navItems[idx]) navItems[idx].link.classList.add("active");
+    // Auto-scroll TOC sidebar to keep the active item visible
+    var activeLink = navItems[idx] ? navItems[idx].link : null;
+    if (activeLink) {
+      var linkTop = activeLink.offsetTop;
+      var linkBottom = linkTop + activeLink.offsetHeight;
+      var viewTop = sidebar.scrollTop;
+      var viewHeight = sidebar.clientHeight;
+      if (linkTop < viewTop + 40) {
+        sidebar.scrollTop = Math.max(0, linkTop - 40);
+      } else if (linkBottom > viewTop + viewHeight - 40) {
+        sidebar.scrollTop = linkBottom - viewHeight + 40;
+      }
+    }
+  }
+  window.addEventListener("scroll", onScroll);
+  onScroll();
+})();
+
+// 自动统计正文字数、行数与预计阅读时间
+(function(){
+  var container = document.querySelector('.container');
+  if(!container) return;
+  var dateMeta = container.querySelector('.date-meta');
+  if(!dateMeta) return;
+  var statsEl = dateMeta.querySelector('.meta-stats');
+  if(!statsEl) return;
+  // 临时隐藏 date-meta，避免其自身文字计入统计
+  dateMeta.style.display = 'none';
+  var text = container.innerText || container.textContent || '';
+  dateMeta.style.display = '';
+  var charCount = text.replace(/\s+/g, '').length;
+  var lineCount = text.split('\n').map(function(s){ return s.trim(); }).filter(function(s){ return s.length > 0; }).length;
+  var readMin = Math.max(1, Math.round(charCount / 400));
+  statsEl.textContent = ' | 约 ' + lineCount + ' 行 · 约 ' + charCount + ' 字 · 预计阅读 ' + readMin + ' 分钟';
+})();
+
+// auto-wrap tables in .table-scroll for horizontal scroll on overflow
+(function(){
+  var tables = document.querySelectorAll('table');
+  tables.forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'table-scroll';
+    t.parentNode.insertBefore(wrap, t);
+    wrap.appendChild(t);
+  });
+})();
+
+// 图片单击放大预览：单击正文图片从原位置动画放大到视口中央，再单击预览层动画缩回原位
+(function(){
+  var ZOOM_DUR = 340;   // 放大/缩回时长，须与 .imgz-overlay img 的 CSS 过渡时长一致
+  var GUARD = 300;      // 打开后的保护窗口：窗口内的第二次单击（双击习惯）不当作关闭
+  var overlay = null, clone = null, srcImg = null, openedAt = 0;
+
+  function openZoom(img){
+    if(overlay) return;
+    var r = img.getBoundingClientRect();
+    if(!r.width || !r.height) return;
+    var vw = window.innerWidth, vh = window.innerHeight, pad = 24;
+    var k = Math.min((vw - pad * 2) / r.width, (vh - pad * 2) / r.height);   // 等比放大到视口内
+    var w = r.width * k, h = r.height * k;
+    var tl = (vw - w) / 2, tt = (vh - h) / 2;
+    srcImg = img;
+    var cs = getComputedStyle(img);
+    clone = img.cloneNode(false);
+    clone.style.maxWidth = 'none';
+    clone.style.maxHeight = 'none';
+    clone.style.border = cs.border;          // 保留原图边框/圆角/底色，放大过程视觉连续
+    clone.style.borderRadius = cs.borderRadius;
+    clone.style.background = cs.backgroundColor;
+    clone.style.boxShadow = cs.boxShadow;
+    clone.style.left = tl + 'px';            // 先按放大后的目标位置落位，
+    clone.style.top = tt + 'px';
+    clone.style.width = w + 'px';
+    clone.style.height = h + 'px';
+    clone.style.transform = 'translate(' + (r.left - tl) + 'px,' + (r.top - tt) + 'px) scale(' + (r.width / w) + ')';
+
+    overlay = document.createElement('div');
+    overlay.className = 'imgz-overlay';
+    overlay.appendChild(clone);
+    document.body.appendChild(overlay);
+    document.body.classList.add('imgz-open');
+    openedAt = Date.now();
+
+    void clone.offsetWidth;                  // 强制 reflow：先落在原图位置，再起飞
+    overlay.classList.add('imgz-in');
+    clone.style.transform = 'translate(0px,0px) scale(1)';   // 只动 transform：合成层动画，不逐帧重排
+  }
+
+  function closeZoom(){
+    if(!overlay) return;
+    var ov = overlay, cl = clone;
+    var r = srcImg ? srcImg.getBoundingClientRect() : null;  // 预览期间锁定了滚动，原位坐标不变
+    var tl = parseFloat(cl.style.left), tt = parseFloat(cl.style.top), w = parseFloat(cl.style.width);
+    overlay = clone = srcImg = null;
+    if(r && r.width && w) cl.style.transform = 'translate(' + (r.left - tl) + 'px,' + (r.top - tt) + 'px) scale(' + (r.width / w) + ')';
+    ov.classList.remove('imgz-in');
+
+    var cleaned = false;
+    var cleanup = function(){                // 等缩回动画真正跑完再移除，避免半路跳变
+      if(cleaned) return;
+      cleaned = true;
+      if(ov.parentNode) ov.parentNode.removeChild(ov);
+      if(!document.querySelector('.imgz-overlay')) document.body.classList.remove('imgz-open');
+    };
+    cl.addEventListener('transitionend', function(ev){ if(ev.propertyName === 'transform') cleanup(); });
+    setTimeout(cleanup, ZOOM_DUR + 400);     // 兜底：过渡事件异常时也能收尾
+  }
+
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if(overlay){                             // 预览中：单击预览层任意处缩回
+      if(overlay.contains(t)){
+        e.preventDefault();
+        if(Date.now() - openedAt > GUARD) closeZoom();
+      }
+      return;
+    }
+    if(t.tagName === 'IMG' && t.closest('.container')){ e.preventDefault(); openZoom(t); }
+  });
+})();
+
+</script>
+</body>
+</html>
