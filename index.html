@@ -461,6 +461,29 @@
 .btn-primary:disabled{opacity:.45; cursor:not-allowed}
 .btn-ghost{background:var(--surface); color:var(--ink-3)}
 .btn-ghost:hover{background:var(--surface-2); color:var(--ink)}
+.link-audit{border:1px solid var(--line); border-radius:8px; background:var(--surface); padding:14px 18px; margin:0 0 24px}
+.link-audit__bar{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.link-audit__heading{font-size:19px; font-weight:640; color:var(--ink); line-height:1.4}
+.link-audit__count{font-size:17px; font-weight:400; color:var(--ink-4); margin-left:8px}
+.link-audit__actions{display:flex; gap:8px; flex-wrap:wrap}
+.link-audit__btn{font-family:inherit; font-size:17px; line-height:1.2; padding:6px 11px; border:1px solid var(--line); border-radius:6px; background:var(--surface); color:var(--accent-ink); cursor:pointer}
+.link-audit__btn:hover{background:var(--accent-soft); border-color:var(--accent); color:var(--accent-deep)}
+.link-audit__details{margin-top:12px; border-top:1px solid var(--line-2); padding-top:10px}
+.link-audit__details summary{cursor:pointer; font-size:18px; color:var(--ink-3); line-height:1.55; padding:2px 0}
+.link-audit__details[open] summary{margin-bottom:10px}
+.link-audit__list{padding-left:1.5em; margin:0 0 4px}
+.link-audit__list li{margin-bottom:10px; font-size:18px; line-height:1.55; color:var(--ink-3)}
+.link-audit__list li:last-child{margin-bottom:0}
+.link-audit__list a{font-weight:600; color:var(--accent-ink)}
+.link-audit__meta{display:inline-block; margin-left:8px; font-size:16px; color:var(--ink-4)}
+.link-audit__url{display:block; margin-top:2px; font-family:var(--mono); font-size:15px; color:var(--ink-4); word-break:break-all}
+@media (max-width:720px){
+  .link-audit{padding:12px 14px}
+  .link-audit__bar{align-items:flex-start; flex-direction:column}
+  .link-audit__actions{width:100%}
+  .link-audit__btn{flex:1}
+  .link-audit__meta{display:block; margin-left:0; margin-top:2px}
+}
 table.todo-table{table-layout:fixed; min-width:0; width:100%}
 .table-scroll table.todo-table{min-width:0; table-layout:fixed}
 .table-scroll table.todo-table th,.table-scroll table.todo-table td{padding:14px 16px; max-width:none}
@@ -522,8 +545,138 @@ h2[id],h3[id]{scroll-margin-top:140px}
 <header class="hero">
 <h1>Gefei SEO 学习路线</h1>
 <p class="hero__lede">按《gefei教程文字版》原文顺序整理的<strong>22 个学习节点</strong>。勾选即记录进度，下次打开自动恢复。</p>
-<div class="date-meta"><strong>2026年10月19日 21:41</strong><span class="meta-stats"></span><span class="meta-version"> | v1版</span><span class="meta-agent"> | Claude Code 产出</span></div>
+<div class="date-meta"><strong>2026年10月19日 21:58</strong><span class="meta-stats"></span><span class="meta-version"> | v2版</span><span class="meta-agent"> | Claude Code 产出</span></div>
 </header>
+
+<div class="link-audit">
+  <div class="link-audit__bar">
+    <div class="link-audit__heading">原始链接核对<span class="link-audit__count">23 个</span></div>
+    <div class="link-audit__actions">
+      <button class="link-audit__btn" type="button" id="expandAllLinks">全展开</button>
+      <button class="link-audit__btn" type="button" id="collapseAllLinks">全折叠</button>
+    </div>
+  </div>
+  <details class="link-audit__details" data-link-details>
+    <summary>展开查看原文中的全部链接（23 个，含 1 个重复出现）</summary>
+    <ol class="link-audit__list">
+      <li>
+        <a href="https://ahrefs.com/zh/seo" target="_blank" rel="noopener noreferrer">01 · Ahrefs 公开课程</a>
+        <span class="link-audit__meta">原文第 2 行 · 对应页面第 01 项</span>
+        <span class="link-audit__url">https://ahrefs.com/zh/seo</span>
+      </li>
+      <li>
+        <a href="https://new.web.cafe/tutorial/0c91c83924e9495aa75384becf6304ff" target="_blank" rel="noopener noreferrer">02 · SEO 进阶教程</a>
+        <span class="link-audit__meta">原文第 6 行 · 对应页面第 02 项</span>
+        <span class="link-audit__url">https://new.web.cafe/tutorial/0c91c83924e9495aa75384becf6304ff</span>
+      </li>
+      <li>
+        <a href="https://new.web.cafe/tutorial/7c36c9a7c6e34d21b8f3efd857d980aa" target="_blank" rel="noopener noreferrer">03 · 作者写的新手入门</a>
+        <span class="link-audit__meta">原文第 9 行 · 对应页面第 03 项</span>
+        <span class="link-audit__url">https://new.web.cafe/tutorial/7c36c9a7c6e34d21b8f3efd857d980aa</span>
+      </li>
+      <li>
+        <a href="https://new.web.cafe/tutorial/89afd4d0414d41e6b5f9304ee42df055" target="_blank" rel="noopener noreferrer">04 · 挖掘需求教程 · 第一篇</a>
+        <span class="link-audit__meta">原文第 12 行 · 对应页面第 04 项</span>
+        <span class="link-audit__url">https://new.web.cafe/tutorial/89afd4d0414d41e6b5f9304ee42df055</span>
+      </li>
+      <li>
+        <a href="https://new.web.cafe/tutorial/detail/fp0zl0dtob" target="_blank" rel="noopener noreferrer">05 · 挖掘需求教程 · 第二篇</a>
+        <span class="link-audit__meta">原文第 13 行 · 对应页面第 05 项</span>
+        <span class="link-audit__url">https://new.web.cafe/tutorial/detail/fp0zl0dtob</span>
+      </li>
+      <li>
+        <a href="https://new.web.cafe/tutorial/detail/7v7tfjneg9" target="_blank" rel="noopener noreferrer">06 · 判断关键词是否可做 · 教程</a>
+        <span class="link-audit__meta">原文第 16 行 · 对应页面第 06 项</span>
+        <span class="link-audit__url">https://new.web.cafe/tutorial/detail/7v7tfjneg9</span>
+      </li>
+      <li>
+        <a href="https://new.web.cafe/search?q=%E5%88%A4%E6%96%AD" target="_blank" rel="noopener noreferrer">07 · 判断关键词是否可做 · 站内搜索</a>
+        <span class="link-audit__meta">原文第 17 行 · 对应页面第 07 项</span>
+        <span class="link-audit__url">https://new.web.cafe/search?q=%E5%88%A4%E6%96%AD</span>
+      </li>
+      <li>
+        <a href="https://new.web.cafe/tutorial/detail/sk5je1bj0f" target="_blank" rel="noopener noreferrer">08 · 上站之后要做什么</a>
+        <span class="link-audit__meta">原文第 20 行 · 对应页面第 08 项</span>
+        <span class="link-audit__url">https://new.web.cafe/tutorial/detail/sk5je1bj0f</span>
+      </li>
+      <li>
+        <a href="https://new.web.cafe/tutorial/detail/5yyr7zjxk7" target="_blank" rel="noopener noreferrer">09 · 工具落地页要如何设计</a>
+        <span class="link-audit__meta">原文第 23 行 · 对应页面第 09 项</span>
+        <span class="link-audit__url">https://new.web.cafe/tutorial/detail/5yyr7zjxk7</span>
+      </li>
+      <li>
+        <a href="https://new.web.cafe/tutorial/detail/za408lc1q9" target="_blank" rel="noopener noreferrer">10 · 如何做精品工具站</a>
+        <span class="link-audit__meta">原文第 26 行 · 对应页面第 10 项</span>
+        <span class="link-audit__url">https://new.web.cafe/tutorial/detail/za408lc1q9</span>
+      </li>
+      <li>
+        <a href="https://new.web.cafe/tutorial/7PG1iQzr3sXx1tyKmf9ZYd" target="_blank" rel="noopener noreferrer">11 · 养网站防老系列 · 全流程</a>
+        <span class="link-audit__meta">原文第 29 行 · 对应页面第 11 项</span>
+        <span class="link-audit__url">https://new.web.cafe/tutorial/7PG1iQzr3sXx1tyKmf9ZYd</span>
+      </li>
+      <li>
+        <a href="https://new.web.cafe/experience/ao30ki8tzk" target="_blank" rel="noopener noreferrer">12 · 加外链 · 博客评论外链</a>
+        <span class="link-audit__meta">原文第 32 行 · 对应页面第 12 项</span>
+        <span class="link-audit__url">https://new.web.cafe/experience/ao30ki8tzk</span>
+      </li>
+      <li>
+        <a href="https://new.web.cafe/topic/xoi32sha0d" target="_blank" rel="noopener noreferrer">13 · 加外链 · 相关话题</a>
+        <span class="link-audit__meta">原文第 33 行 · 对应页面第 13 项</span>
+        <span class="link-audit__url">https://new.web.cafe/topic/xoi32sha0d</span>
+      </li>
+      <li>
+        <a href="https://new.web.cafe/tutorials" target="_blank" rel="noopener noreferrer">14 · 教程栏目</a>
+        <span class="link-audit__meta">原文第 36 行 · 对应页面第 14 项</span>
+        <span class="link-audit__url">https://new.web.cafe/tutorials</span>
+      </li>
+      <li>
+        <a href="https://new.web.cafe/topic/bgwrjx3one" target="_blank" rel="noopener noreferrer">15 · 领取两套源代码</a>
+        <span class="link-audit__meta">原文第 43 行 · 对应页面第 15 项</span>
+        <span class="link-audit__url">https://new.web.cafe/topic/bgwrjx3one</span>
+      </li>
+      <li>
+        <a href="https://ahrefs.com/zh/seo" target="_blank" rel="noopener noreferrer">16 · Ahrefs 公开课程（原文第二次出现）</a>
+        <span class="link-audit__meta">原文第 48 行 · 对应页面第 01 项（重复）</span>
+        <span class="link-audit__url">https://ahrefs.com/zh/seo</span>
+      </li>
+      <li>
+        <a href="https://ahrefs.com/blog/zh/how-do-search-engines-work/" target="_blank" rel="noopener noreferrer">17 · 第一篇：搜索引擎如何工作的以及你为什么要在意？</a>
+        <span class="link-audit__meta">原文第 51 行 · 对应页面第 16 项</span>
+        <span class="link-audit__url">https://ahrefs.com/blog/zh/how-do-search-engines-work/</span>
+      </li>
+      <li>
+        <a href="https://ahrefs.com/blog/zh/seo-basics/" target="_blank" rel="noopener noreferrer">18 · 第二篇：SEO 基础：新手 SEO 成功指南</a>
+        <span class="link-audit__meta">原文第 54 行 · 对应页面第 17 项</span>
+        <span class="link-audit__url">https://ahrefs.com/blog/zh/seo-basics/</span>
+      </li>
+      <li>
+        <a href="https://ahrefs.com/blog/zh/keyword-research/" target="_blank" rel="noopener noreferrer">19 · 第三篇：如何进行 SEO 关键词研究（入门指南）</a>
+        <span class="link-audit__meta">原文第 57 行 · 对应页面第 18 项</span>
+        <span class="link-audit__url">https://ahrefs.com/blog/zh/keyword-research/</span>
+      </li>
+      <li>
+        <a href="https://ahrefs.com/blog/seo-content/" target="_blank" rel="noopener noreferrer">20 · 第四篇：SEO Content: The Beginner’s Guide（只有英文版）</a>
+        <span class="link-audit__meta">原文第 60 行 · 对应页面第 19 项</span>
+        <span class="link-audit__url">https://ahrefs.com/blog/seo-content/</span>
+      </li>
+      <li>
+        <a href="https://ahrefs.com/blog/zh/on-page-seo/" target="_blank" rel="noopener noreferrer">21 · 第五篇：On-Page SEO：什么是页面优化？如何进行页面优化？（附清单）</a>
+        <span class="link-audit__meta">原文第 63 行 · 对应页面第 20 项</span>
+        <span class="link-audit__url">https://ahrefs.com/blog/zh/on-page-seo/</span>
+      </li>
+      <li>
+        <a href="https://ahrefs.com/blog/zh/link-building/" target="_blank" rel="noopener noreferrer">22 · 第六篇：SEO 链接建设：初学者指南</a>
+        <span class="link-audit__meta">原文第 66 行 · 对应页面第 21 项</span>
+        <span class="link-audit__url">https://ahrefs.com/blog/zh/link-building/</span>
+      </li>
+      <li>
+        <a href="https://ahrefs.com/blog/zh/technical-seo/" target="_blank" rel="noopener noreferrer">23 · 第七篇：技术 SEO 初学者指南</a>
+        <span class="link-audit__meta">原文第 69 行 · 对应页面第 22 项</span>
+        <span class="link-audit__url">https://ahrefs.com/blog/zh/technical-seo/</span>
+      </li>
+    </ol>
+  </details>
+</div>
 
 <div class="study-progress" id="studyProgress">
   <div class="study-progress__top">
@@ -850,6 +1003,16 @@ h2[id],h3[id]{scroll-margin-top:140px}
     done = {};
     save();
     update();
+  });
+
+  var linkDetails = Array.prototype.slice.call(document.querySelectorAll('details[data-link-details]'));
+  var expandAllLinks = document.getElementById('expandAllLinks');
+  if (expandAllLinks) expandAllLinks.addEventListener('click', function(){
+    linkDetails.forEach(function(d){ d.open = true; });
+  });
+  var collapseAllLinks = document.getElementById('collapseAllLinks');
+  if (collapseAllLinks) collapseAllLinks.addEventListener('click', function(){
+    linkDetails.forEach(function(d){ d.open = false; });
   });
 
   var tocHeading = document.querySelector('.toc-heading');
