@@ -477,6 +477,7 @@
 .link-audit__list a{font-weight:600; color:var(--accent-ink)}
 .link-audit__meta{display:inline-block; margin-left:8px; font-size:16px; color:var(--ink-4)}
 .link-audit__url{display:block; margin-top:2px; font-family:var(--mono); font-size:15px; color:var(--ink-4); word-break:break-all}
+.link-audit__note{font-size:16px; color:var(--ink-4); line-height:1.55; margin:10px 0 0}
 @media (max-width:720px){
   .link-audit{padding:12px 14px}
   .link-audit__bar{align-items:flex-start; flex-direction:column}
@@ -496,6 +497,7 @@ table.todo-table{table-layout:fixed; min-width:0; width:100%}
 .todo-domain{font-size:17px; color:var(--ink-4); margin-top:6px; line-height:1.4; word-break:break-all}
 .open-link{display:inline-block; font-size:18px; font-weight:600; color:var(--accent-ink); border:1px solid var(--accent-line); border-radius:6px; padding:6px 10px; line-height:1.2; white-space:nowrap; background:var(--surface)}
 .open-link:hover{background:var(--accent-soft); color:var(--accent-deep); border-color:var(--accent)}
+.todo-nolink{display:inline-block; font-size:18px; font-weight:600; color:var(--ink-4); border:1px dashed var(--line); border-radius:6px; padding:6px 10px; line-height:1.2; white-space:nowrap; background:var(--surface)}
 .todo-checkbox{display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-size:18px; color:var(--ink-3); white-space:nowrap; user-select:none}
 .todo-checkbox input{width:22px; height:22px; accent-color:var(--accent); cursor:pointer; flex:0 0 auto}
 .todo-row.is-done .todo-title{color:var(--ink-4)}
@@ -544,20 +546,20 @@ h2[id],h3[id]{scroll-margin-top:140px}
 <div class="container">
 <header class="hero">
 <h1>Gefei SEO 学习路线</h1>
-<p class="hero__lede">按《gefei教程文字版》原文顺序整理的<strong>22 个学习节点</strong>。勾选即记录进度，下次打开自动恢复。</p>
-<div class="date-meta"><strong>2026年10月19日 21:58</strong><span class="meta-stats"></span><span class="meta-version"> | v2版</span><span class="meta-agent"> | Claude Code 产出</span></div>
+<p class="hero__lede">按《gefei教程文字版》原文顺序整理，并补充你后续提供的资源，共<strong>26 个学习节点</strong>。勾选即记录进度，下次打开自动恢复。</p>
+<div class="date-meta"><strong>2026年10月19日 22:04</strong><span class="meta-stats"></span><span class="meta-version"> | v3版</span><span class="meta-agent"> | Claude Code 产出</span></div>
 </header>
 
 <div class="link-audit">
   <div class="link-audit__bar">
-    <div class="link-audit__heading">原始链接核对<span class="link-audit__count">23 个</span></div>
+    <div class="link-audit__heading">全部链接核对<span class="link-audit__count">26 个</span></div>
     <div class="link-audit__actions">
       <button class="link-audit__btn" type="button" id="expandAllLinks">全展开</button>
       <button class="link-audit__btn" type="button" id="collapseAllLinks">全折叠</button>
     </div>
   </div>
   <details class="link-audit__details" data-link-details>
-    <summary>展开查看原文中的全部链接（23 个，含 1 个重复出现）</summary>
+    <summary>展开查看全部链接（26 个 = 原文 23 + 新增 3；原文含 1 个重复）</summary>
     <ol class="link-audit__list">
       <li>
         <a href="https://ahrefs.com/zh/seo" target="_blank" rel="noopener noreferrer">01 · Ahrefs 公开课程</a>
@@ -674,16 +676,36 @@ h2[id],h3[id]{scroll-margin-top:140px}
         <span class="link-audit__meta">原文第 69 行 · 对应页面第 22 项</span>
         <span class="link-audit__url">https://ahrefs.com/blog/zh/technical-seo/</span>
       </li>
+      <li>
+        <a href="https://new.web.cafe/tutorial/dcvnnso7jg" target="_blank" rel="noopener noreferrer">24 · 哥飞 15 万采购的 AI 编程教程</a>
+        <span class="link-audit__meta">本次新增 · 对应页面第 24 项</span>
+        <span class="link-audit__url">https://new.web.cafe/tutorial/dcvnnso7jg</span>
+      </li>
+      <li>
+        <a href="https://new.web.cafe/messages" target="_blank" rel="noopener noreferrer">25 · 社群群聊历史消息</a>
+        <span class="link-audit__meta">本次新增 · 对应页面第 25 项</span>
+        <span class="link-audit__url">https://new.web.cafe/messages</span>
+      </li>
+      <li>
+        <a href="https://new.web.cafe/topic/hva8tgp9o2" target="_blank" rel="noopener noreferrer">26 · 新手必玩的三个 SEO 模拟器</a>
+        <span class="link-audit__meta">本次新增 · 对应页面第 26 项</span>
+        <span class="link-audit__url">https://new.web.cafe/topic/hva8tgp9o2</span>
+      </li>
     </ol>
+    <p class="link-audit__note">说明：另有 1 个无链接任务「视频号两个直播回放」（页面第 23 项），不计入链接清单。</p>
   </details>
+</div>
+
+<div class="highlight-box">
+  <p><strong>开始前建议：</strong>先看微信视频号「哥飞出海」的两个直播回放，建立初印象后再回到下面的图文教程。两个视频的查找方式见文末「补充学习资源」第 23 项。</p>
 </div>
 
 <div class="study-progress" id="studyProgress">
   <div class="study-progress__top">
-    <div class="study-progress__count"><span id="doneCount">0</span><span class="study-progress__total"> / 22 已完成</span></div>
+    <div class="study-progress__count"><span id="doneCount">0</span><span class="study-progress__total"> / 26 已完成</span></div>
     <div class="study-progress__pct" id="donePct">0%</div>
   </div>
-  <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="22" aria-valuenow="0" aria-label="学习进度"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="26" aria-valuenow="0" aria-label="学习进度"><div class="progress-fill" id="progressFill"></div></div>
   <div class="study-progress__bottom">
     <div class="study-progress__next" id="nextHint">下一项：<strong>01 · Ahrefs 公开课程</strong></div>
     <div class="study-progress__actions">
@@ -913,10 +935,56 @@ h2[id],h3[id]{scroll-margin-top:140px}
   </tbody>
 </table>
 
+<h2 id="extra">补充学习资源</h2>
+<p>以下资源来自你后续补充的说明。建议先看视频号的两个直播回放，再回到上面的图文教程；全部看完后，来玩三个 SEO 模拟器，多玩几遍再开始实操。</p>
+<table class="todo-table">
+  <thead>
+    <tr><th class="todo-num">#</th><th>学习内容</th><th class="todo-link-col">链接</th><th class="todo-check-col">完成</th></tr>
+  </thead>
+  <tbody>
+      <tr class="todo-row" data-id="23" data-url="" data-title="视频号：哥飞出海 · 两个直播回放">
+        <td class="todo-num">23</td>
+        <td class="todo-main">
+          <div class="todo-title">视频号：哥飞出海 · 两个直播回放</div>
+        <div class="todo-desc">在微信视频号「哥飞出海」找到直播回放，重点看两个视频：①「SEO 扫盲公益培训」by 哥飞（黑色背景、白色文字标题，很容易找到）；② 哥飞的朋友们社群两周年直播回放（蓝色背景、白色和黄色文字，图片文字是「如何从零开始赚到第 1 美元」）。建议在图文教程之前先看，建立初印象。</div>
+        </td>
+        <td class="todo-link-col"><span class="todo-nolink">微信视频号</span><div class="todo-domain">无链接任务</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="23" aria-label="标记第 23 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="24" data-url="https://new.web.cafe/tutorial/dcvnnso7jg" data-title="哥飞 15 万采购的 AI 编程教程">
+        <td class="todo-num">24</td>
+        <td class="todo-main">
+          <div class="todo-title">哥飞 15 万采购的 AI 编程教程</div>
+        <div class="todo-desc">哥飞花了 15 万采购的 AI 编程教程，可以在这里学习。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/tutorial/dcvnnso7jg" target="_blank" rel="noopener noreferrer">打开教程</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="24" aria-label="标记第 24 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="25" data-url="https://new.web.cafe/messages" data-title="社群群聊历史消息">
+        <td class="todo-num">25</td>
+        <td class="todo-main">
+          <div class="todo-title">社群群聊历史消息</div>
+        <div class="todo-desc">查看社群群聊历史消息。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/messages" target="_blank" rel="noopener noreferrer">查看消息</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="25" aria-label="标记第 25 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+      <tr class="todo-row" data-id="26" data-url="https://new.web.cafe/topic/hva8tgp9o2" data-title="新手必玩的三个 SEO 模拟器">
+        <td class="todo-num">26</td>
+        <td class="todo-main">
+          <div class="todo-title">新手必玩的三个 SEO 模拟器</div>
+        <div class="todo-desc">全部看完后，来玩这三个模拟游戏，多玩几遍，再开始实操。对理解 SEO 非常有帮助。</div>
+        </td>
+        <td class="todo-link-col"><a class="open-link" href="https://new.web.cafe/topic/hva8tgp9o2" target="_blank" rel="noopener noreferrer">打开模拟器</a><div class="todo-domain">new.web.cafe</div></td>
+        <td class="todo-check-col"><label class="todo-checkbox"><input type="checkbox" class="done-toggle" data-id="26" aria-label="标记第 26 项为已完成"><span class="todo-checkbox__text">未完成</span></label></td>
+      </tr>
+  </tbody>
+</table>
+
 <div class="source-list">
-  <p><strong>资料来源：</strong>gefei教程文字版.txt（本地文件）。学习顺序与每条说明均按原文整理。</p>
+  <p><strong>资料来源：</strong>gefei教程文字版.txt（本地文件）+ 你后续补充的资源说明。学习顺序与每条说明均按原文或原始说明整理。</p>
   <p><strong>进度说明：</strong>勾选状态保存在当前浏览器的 localStorage，不会上传到服务器；换浏览器或清除站点数据后需要重新勾选。</p>
-  <p><strong>整理说明：</strong>Ahrefs 公开课程在原文中出现两次，已在第 1 项与「基础必读」开头合并展示；第二部分原文仅提供篇目标题，未附额外说明。</p>
+  <p><strong>整理说明：</strong>原文 23 个链接（含 Ahrefs 课程重复 1 次）全部保留；本次新增 3 个链接和 1 个视频任务，见「补充学习资源」。第二部分原文仅提供篇目标题，未附额外说明。</p>
 </div>
 
 <script>
@@ -960,10 +1028,11 @@ h2[id],h3[id]{scroll-margin-top:140px}
     var hint = document.getElementById('nextHint');
     var btn = document.getElementById('continueBtn');
     if (nextRow) {
+      var nextUrl = nextRow.getAttribute('data-url') || '';
       hint.innerHTML = '下一项：<strong>' + escapeHtml(nextRow.getAttribute('data-id')) + ' · ' + escapeHtml(nextRow.getAttribute('data-title')) + '</strong>';
-      btn.textContent = '继续学习';
+      btn.textContent = nextUrl ? '继续学习' : '查看下一项';
       btn.disabled = false;
-      btn.setAttribute('data-url', nextRow.getAttribute('data-url'));
+      btn.setAttribute('data-url', nextUrl);
     } else {
       hint.innerHTML = '全部完成，复习一遍或重置进度重新开始。';
       btn.textContent = '已全部完成';
@@ -992,10 +1061,9 @@ h2[id],h3[id]{scroll-margin-top:140px}
   var continueBtn = document.getElementById('continueBtn');
   continueBtn.addEventListener('click', function(){
     var url = continueBtn.getAttribute('data-url');
-    if (!url) return;
     var next = document.querySelector('tr.todo-row.is-next');
     if (next) next.scrollIntoView({behavior:'smooth', block:'center'});
-    window.open(url, '_blank', 'noopener');
+    if (url) window.open(url, '_blank', 'noopener');
   });
 
   document.getElementById('resetBtn').addEventListener('click', function(){
